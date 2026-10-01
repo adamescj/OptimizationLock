@@ -1,223 +1,154 @@
-## Translations
-### [🇲🇽 Instrucciones en español aqui](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_spanish.md)
-Translated by [Tamara Mochaccina](https://throne.com/anonimacl) and Heathen
-### [🇷🇺 Инструкции на русском тута](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_russian.md)
-Translated by [Egyptianscale](https://youtube.com/@egyptianscale?si=dut5A-T0kcPaHOCM)
-### [🇧🇷 Instruções em Português aqui](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_portuguese.md)
-Translated by Linaa and [anartoast](https://ko-fi.com/anartoast)
-### [🇧🇬 Инструкции на български тук](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_bulgarian.md)
-Translated by [Macchiako](https://ko-fi.com/kity985)
-### [🇮🇹 Istruzioni in italiano qui](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_italian.md)
-Translated by Cyvoid
-### [🇫🇷 Instructions en français ici](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_french.md)
-Translated by Vi
-### [🇨🇳 中文说明](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_chinese.md)
-Translated by [ZHTodd223](https://github.com/ZHTodd223)
-### [🇺🇦 Інструкції українською тут](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_ukrainian.md)
-Translated by [Sasha11711](https://gamebanana.com/members/4167224)
+# OptimizationLock — adamescj's fork
 
-## Main body
+Performance configs (`gameinfo.gi`) for **Deadlock**, plus a lighter, visuals-first variant and a few fixes.
 
-To either request support or contribute findings to the project, our Discord Server can be found [here](https://discord.gg/EF3Jq57jQv). 
-If you see me in game say hi! My username is "I want to eat flowers!"
+> **Credit where it's due:** this is a fork of [**Sqooky's OptimizationLock**](https://github.com/Sqooky/OptimizationLock).
+> Nearly everything here — the configs, the research, the convar documentation — is the work of Sqooky and the
+> OptimizationLock community (boot, Kaizuchaneru, Piggy, Jasper, Abdalla, Artemon121, Kunet, Maihdenless, the translators,
+> and many more). The full original README, with every contributor, translator and donor, is kept in
+> [ORIGINAL_README.md](ORIGINAL_README.md).
+>
+> If this helps you, please support the original author: **[ko-fi.com/sqooky](https://ko-fi.com/sqooky)** ·
+> [OptimizationLock Discord](https://discord.gg/EF3Jq57jQv)
 
-### Donating
-I've probably put *at least* five hundred hours into working on this project. I want it to be free forever, but I'm dirt poor and if you would like to donate as a means of showing thanks I have a kofi here! https://ko-fi.com/sqooky and I will love you forever. You will be added to the list of donors and I will probably read your name at the end of the next yt videos I make. 
+---
 
-<a href="https://ko-fi.com/sqooky" target="_blank"><img height="90" src="https://files.gamebanana.com/img/ss/mods/6a29840754e45.jpg" alt="Buy Me a Coffee at ko-fi.com"></a> <br>
+## What this fork adds
 
-#### [List of Donors](https://github.com/Sqooky/OptimizationLock#donors)
+- **[A light config](adamescj's%20light%20config)** — Sqooky's default with the ugliest cuts reverted: normal lighting,
+  no pop-in, proper LODs, vents visible at range, and a saner ~91° FOV.
+- **Updater keeps your mod loader.** `auto updater/gameinfo_updater.py` used to throw away any extra search paths
+  (e.g. Grimoire's `citadel/grimoire`) on every update. It now carries them over. There's also a `--config light` shortcut.
+- **Duplicate convar cleanup.** Several configs set the same convar twice, and only the *last* line counts — so editing
+  the first one silently did nothing. The shadowed copies are now commented out and tagged
+  `// [duplicate - overridden by the later ...]`. Nothing about how the configs behave changed.
+  - Heads-up: in Sqooky's default, `sc_layer_batch_threshold_fullsort` is documented as `120`, but the stock block later sets `20`,
+    and `snd_ui_positional "false"` is likewise overridden by a later `"1"`. That was already the case before; it's just visible now.
+- **Fixed a broken file.** `Sqooky's .gi/addons/pak54_dir.vpk` was a symlink to a path on the original author's PC. It's now the real
+  Blur Disabler addon.
+- Small housekeeping: removed a stray editor backup, ignored `*~`/`__pycache__`, filled in [Screenshots.md](Screenshots.md).
 
-<div>
-  <img src="https://github.com/Sqooky/OptimizationLock/blob/main/media/joy.png?raw=true" alt="A picture reading Sqooky's .gi A collage of performance configs with the intent of optimizing the game."/>
-</div>
+---
 
-## Base Instructions
-To install the performance config replace the gameinfo.gi in ``steamapps/common/deadlock/game/citadel`` with the one downloaded from this repository.
-**There is a video tutorial** for installation available [here](https://youtu.be/TbjLbQVN2kE)
+## Quick start
 
-## Table
-Here is a list of each config provided in this repository.
-| Config File                                                                                                                     | Purpose                                                                                                              | Screenshots |
-|---------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------| --- |
-| [Sqooky's Config/Optimizationlock Default](https://github.com/Sqooky/OptimizationLock/blob/main/Sqooky's%20.gi/gameinfo.gi)                                    | Performance oriented with the intent of not making the game ugly. I would recommend this for most users. | Screenshots avalible [here](https://github.com/Sqooky/OptimizationLock/tree/main/Sqooky's%20.gi) |
-| [Sqooky's Max FPS Config](https://github.com/Sqooky/OptimizationLock/blob/main/test_cfg/gameinfo.gi) | Sqooky's Max Fps config. It is currently under development and as such isn't fully documented, but this config gives the best overall fps I am aware of. | No screenshots.                                                                                         |
-| [Boot's Max Fps](https://github.com/Sqooky/OptimizationLock/blob/main/boot's%20maxium%20fps%20config/gameinfo.gi)                                    | Gives good fps but is functionally depricated as boot hasn't been able to maintain it for a while. | Screenshots avalible [here](https://github.com/Sqooky/OptimizationLock/tree/main/boot's%20maxium%20fps%20config) |                   |
-| [Kaizuchaneru's Minimum Spec](https://github.com/Sqooky/OptimizationLock/blob/main/kaizuchanerus%20minimum%20spec/gameinfo.gi) | This config prioritizes fps above all else and dramatically reduces graphical quality. Recommended for bad computers |  Screenshots avalible [here](https://github.com/Sqooky/OptimizationLock/tree/main/kaizuchanerus%20minimum%20spec)                     |
-| [Piggy's gameinfo.gi](https://github.com/Sqooky/OptimizationLock/tree/main/piggy's%20config%20(comparatively%20outdated))                                    |  As of current piggy's config is outdated, but it is here for if you want to use his config                                                     |                    |
-| [Convars.txt](https://github.com/Sqooky/OptimizationLock/blob/main/convars.txt)                                                 | Every single convar in the game's code. Not a proper config but instead a reference.                                 |                    |
-[comment]: <> | [Base_convars.txt](https://github.com/Sqooky/OptimizationLock/blob/main/base_convars.txt)                                       | All of the convars used in optimizationlock's defaults in case you want to add them manually.                        |                    |
+1. **Pick a config** from the table below.
+2. **Back up** your current `gameinfo.gi`.
+3. **Replace** it with the one you picked:
 
+| OS | Location |
+|---|---|
+| Windows | `C:\Program Files (x86)\Steam\steamapps\common\Deadlock\game\citadel\gameinfo.gi` |
+| Linux | `~/.steam/steam/steamapps/common/Deadlock/game/citadel/gameinfo.gi` |
 
-# FAQ
-- "Will this effect my mods?"
-No. Every config file included in this repo has mod support already added.
-- "How do I find a value in the config"  
-Press ctrl+f in your text editor and type in the string you want.  
-- "How do I restore a value to default"  
-Comment it out.  
-- "What does commenting mean"  
-To comment a line put ``//`` at the front of the line. It will make it not executed by the config.  
-- "Why are my characters dark in the portraits on the end screen and shop"  
-``lb_enable_dynamic_lights`` set it to ``true``
-- "Why are buildings popping in and out"  
-``r_farz`` or ``r_mapextents`` comment them out.  
-- "How do I change my fov"  
-``citadel_camera_hero_fov`` or ``r_aspectratio`` Comment this out or lower the value.  
-- "The config broke this patch"  
-The gameinfo.gi gets overwritten every major update. You need to manually replace it again.  
-- "I can't see boxes past a certain distance"  
-``r_size_cull_threshold "0.7"``
-- "I can't see trooper healthbars past a certain distance"  
-Change the values ``r_size_cull_threshold`` ``sc_fade_distance_scale_override``
-- "Can't see the Doorman ult indicator"  
-Set ``cl_ragdoll_limit`` to `` "-1"``
-- "There's holes in victor and paige at certain angles"  
-Comment out ``sc_screen_size_lod_scale_override`` or increase the value.
-- "Sinners lights are little triangles"  
-Comment out ``sc_screen_size_lod_scale_override`` or increase the value.  
-- "I'm using boot's/kaiz's config and I can't see heros in shop or in the end screen"  
-``citadel_portrait_world_renderer_off`` comment it out or set it to false  
-- "I'm using boot's/kaiz's config and I can't see lash's ground slam"  
-``r_drawdecals`` comment it out or set it to true  
-- "Can't see blast vent wind at range"  
-``sc_fade_distance_scale_override`` comment it out  
-- "I'm using the maxfps testing config/boot's/kaiz's config and I can't read the inworld text (soul pickups, bridge buffs, statue buffs, etc)  
-Comment out or increase the value of ``citadel_in_world_item_panel_dpi``
-- When I aim down sights (right click) as rem or venator my camera moves down.
-``citadel_camera_use_vmdl_flatten_vertical`` Comment it out or set it to ``true``
-- "I am using Kaizuchaneru's config and my modded skin makes Billy's Blasted look weird"
-``r_citadel_npr_force_solid_outline`` Set this to false. 
-- "The puddle beneath neutrals, the rank display, the statues in spawn, and the spirit urn all now are rainbowy and look super weird."
-``r_citadel_npr_force_solid_outline`` Set this command to false.
-- "I am using Kaizuchaneru's config and my character's clothes don't move sometimes.
-``cloth_update`` set it to 1
-- "Why does McGinnis' wall turn into a tombstone for a second"
-Comment out these from under SceneEffects ``CMTAtlasHeight`` ``CMTAtlasWidth``
+> Deadlock **overwrites `gameinfo.gi` on every major update**. Either re-copy it after patches, or use the
+> [auto updater](auto%20updater) which re-downloads the config and re-applies your personal tweaks for you:
+>
+> ```
+> python "auto updater/gameinfo_updater.py" update --config light
+> ```
 
-## How do I Manually Add Convars
+Video tutorial for the manual install (from the original project): https://youtu.be/TbjLbQVN2kE
 
-To manually add convars you need to open up gameinfo.gi, ctrl+f ``convars`` and paste the commands after the ``{`` 
-When adding convars manually make sure to not remove `` rate {`` or place them in its bracket, as it will cause the game to not launch
-```
-Convars {
-//you want your convars to begin on this line-
+---
 
+## Configs
 
-// And end on this one.
-rate {
-```
+| Config | Best for | Look | Screenshots |
+|---|---|---|---|
+| [**adamescj's Light**](adamescj's%20light%20config/gameinfo.gi) | Decent PCs that want more FPS without the game looking worse | ★★★★☆ | — |
+| [**Sqooky's default**](Sqooky's%20.gi/gameinfo.gi) | Most people. The original recommended config | ★★★☆☆ | [view](Sqooky's%20.gi/screenshots) |
+| [Sqooky's Max FPS (`test_cfg`)](test_cfg/gameinfo.gi) | Max FPS. Experimental, lightly documented | ★★☆☆☆ | — |
+| [Kaizuchaneru's Minimum Spec](kaizuchanerus%20minimum%20spec/gameinfo.gi) | Bad hardware. FPS above everything ([extreme low](kaizuchanerus%20minimum%20spec/gameinfoextremelow.gi) too) | ★☆☆☆☆ | [view](kaizuchanerus%20minimum%20spec/screenshots) |
+| [Boot's Max FPS](boot's%20maxium%20fps%20config/gameinfo.gi) | Archived — no longer maintained | ★★☆☆☆ | [view](boot's%20maxium%20fps%20config/screenshots) |
+| [Piggy's config](piggy's%20config%20%28comparatively%20outdated%29) | Archived — outdated | — | — |
+| [Clean / stock](clean%20gameinfo.gi/gameinfo.gi) | **No performance changes.** Use it to repair a broken file | ★★★★★ | [view](clean%20gameinfo.gi/screenshots) |
 
-# "THE MAP IS WEIRD AND DARK AFTER INSTALLING THE CONFIG"
-Lower your ingame shadow settings to medium or low
-# Mod Support
-Every variation of the config included in this repository has mod support added. For those who wish to remove or add it back in, remove ``Game                citadel/addons`` From the searchpaths bracket.
+Every config already supports mods (`citadel/addons`).
 
-# Credits
- As much as I would love to say I did this alone, I did not. These are the amazing people who deserve as much praise as I, if not more.  
- Major thanks to all of these individuals from the bottom of my heart. They are all lovely.  
-- Sqooky:             I am the primary developer and maintainer of the project, but without everyone else here this project would not be maintained to this degree.  
-- JasperP:            My personal hero. (Valve dev who reached out to me due to my work on the project.)  
-- Boot:               Provided the csm cvars which had a notable performance improvement.  
-- Brullee:            Removed fake cvars, redundant commands, added cvarlist.md, and reformatted config.  
-- Kaizuchaneru:       While not directly invovled in the deveopment, they tested most cvars.  
-- Tamara Mochaccina:  Contributed vindicta scope fix and the fog fix.  
-- RoseyLemonz:        Removed duplicate cvars
+**Reference files:** [convars.txt](convars.txt) (every convar in the game), [cvarlist.txt](cvarlist.txt),
+[cvars_we_can_modify.txt](cvars_we_can_modify.txt), [launch_options.txt](launch_options.txt),
+[base_convars.txt](Sqooky's%20.gi/base_convars.txt) (just the convars Sqooky's default changes, to add by hand).
 
-## Donors
-- Boot:           Gave me FIVE DOLLARS and is just a wonderful person and friend at a baseline
-- Sonny:          Gave me FIVE DOLLARS and waited through me setting up a paypal account and didn't change their mind
-- Soulx:          Gave me FIVE DOLLARS and told me about spirolactone
-- Xeno:           Very politely waited for me to figure out how to accept donations and gave me FIVE DOLLARS
-- N8Fan:          Gave me TEN DOLLARS so I could play vampire survivors
-- Cos:            GAVE ME SEVENTY DOLLARS FOR NO FUCKING REASON I LOVE YOU SO MUCH?????????????????????????
-- Wely:           Gave me THIRTY DOLLARS IN STEAM GIFT CARD MONEY????? WOA
-- Prot4g:         Gave me TWENTY DOLLARS WOA I LOVE YOU!!!
-- catmasta:       Gave me TWO DOLLARS!!
-- a distant admirer: Gave me TEN DOLLARS and a boon!!!
-- Namea:          Gave me TEN DOLLARS in steam gift cards and was unbelivably polite. I love you so much.
-- Kevin:          Gave me TWO DOLLARS also made me trip and write this as kelvin twice. I'm such a mcginnis chud.
-- jusbeprophet:   Gave me ONE DOLLAR! Bless their heart
-- Supporter:      Gave me FIVE DOLLAR!!! many thanks to them.
-- WhoLovesDean:   Incredibly kind fellow and gave me THIRTY DOLLARS
-- john6674:       Gave me TWENTY FIVE DOLLARS that's wild. Thank you john, please take care <3
-- noelle:         Gave me FIVE DOLLAR and is nice with a cool username. Tyyyy
-- exazinho:       First person to subscribe to me on kofi. That's amazing. Huge thank you exazinho. I'm glad you saw my little doodle <3
-- Shotty:         Left an incredibly nice donation message and gave me THIRTY DOLLAR. I'm honored please take care.
-- TheLastFriendly: GAVE ME 100 DOLLARS FOR CLOTHES  I LOVE YOU SO MUCH
-- Olly/Moozen:    Has been an incredible friend for putting up with me. Also gave me thirty bucks for working on some stuff for them ily <3
-- Neytir:         Extremely fun person to talk to and consitent viewer of my streams. Gave me twenty bucks and subscribed on twitch so I could buy balatro! Much love
-- Bytenode:       Taught me everything I know about hud editing, gave me EIGHTY BUCKS AND FIVE CENTS gave me pronoun palace, subscribed on twitch, and is incredibly nice across the board. Much much much love.
-- John Dreamerman: Gave me money in my dream after I explained what r_farz did to him. Isn't bytenode.
-- Martinchodou:   Gave me ONE DOLLAR. Much love. Please take care.
-- HaloKat/June:   Gave me FIVE dollar for breast reduction surgery. Incredible bestie.
-- 6Daves:         Incredibly nice person and has been continually supportive for the duration I have been working on the project. Gave me two dollars and subscribed on twitch. Much love. <3
-- Ehmed:          First twitch subscriber and certified awesome person.
-- NawyLo3b:       A twitch sub :D
-- leroyaxrs:      Incredibly kind and supportive person I'm so glad I met. Thank you for being a delight to talk with.
-- eleanordl:      First person to recognize me ingame and was super nice. Also subscribed on twitch which was incredibly nice.
-- LokiSquared:    Incredibly polite and fun person to talk to. Also gave me a twitch sub :D
-- Mr. Miyagi:     Made my summer and gave me slay the spire 2 on steam. My goat fr fr
-- Connermadethis: Donated FORTY DOLLAR OH MINE GOTT THANK YOU
-- Noelle:         Gave me FIVE DOLLAR and invited me to her matrix instance. I love you :D
-- Blerg:          Gave me FIFTY FIVE DOLLARS OH MY GOD TY please let me know if I can help
-- Drykdap:        Gave me TEN DOLLAR thank youuuuuuuuuuuuuuuuuuuuuuuuu please call me if need be
-- Salem:          Gave me FIVE DOLLAR for helping them with performance and tech support in the official deadlock server. thank youuuuuuuu
-- attention seeker: for donating 18 dollars (one dollar for each % improvement of 1% lows lol)
-- DungeonMaestro: Gave me a dollar for a bit
-- Smugfox:        Gave me five DOLLAR out of kindness :)
-- TheTurtlezsz:   Gave me FIVE DOLLAR asking for tech support :D
-- Supporter:      Gave me two dollar anoymously.
-- Umah:           Gave me TEN DoLLAR for cute clothes. I love you so much thank you
+**Optional addons:** [Various Addons Relating to Performance](Various%20Addons%20Relating%20to%20Performance)
+(blur disabler, optimized soul container, Sinner light fix, Vindicta scope downscale).
 
+---
 
-## Translators
-- Egyptianscale:                    Translated to Russian
-- Tamara Mochaccina and Heathen:    Translated to Spanish
-- Linaa and anartoast:              Translated to Portuguese
-- Macchiako:                        Translated to Bulgarian
-- Cyvoid:                           Translated to Italian
-- Vi:                               Translated to French
-- ZHTodd223:                        Translated to Chinese
-- Sasha11711:                       Translated to Ukrainian!
-- Dirtkiller23:                     Proof read the Russian translation
-- Noskillch:                        Proof read the french translation
+## Field of view
 
+FOV is set with `r_aspectratio` (not `citadel_camera_hero_fov`). Higher = wider. Values are approximate:
 
-## Misc
-- Artemon121:     Made the Citadel cvar unhider, which helped Abdalla fetch cvars and test in-game.
-- Dacooder:       Contributed one fix, copied the config, distributed it as his own, and when I asked why he removed accredition despite previously calling me "the brains of the project" called me a harasser and proceeded to make two videos and a google doc exposing me. Honestly that made my day.
-- Kin:            Did an insane amount of benchmarking unprompted.
-- Kunet:          Made a formatter for the gameinfo syntax! This is why things are properly indented! That's LIT.
-- Maihdenless:    Started the original OptimisationLock & its Discord.
-- Piggy:          Let me mirror his config.
+| `r_aspectratio` | ≈ FOV |
+|---|---|
+| `1.75` | 80° |
+| `2.15` | 90° |
+| `2.2` | 91° — *light config* |
+| `2.49` | 100° |
+| `2.9` | ≈110° — *Sqooky's default* |
 
-## Cool people I've met because of this project who I want to thank anyway
-- 6Daves
-- Achira
-- Anartoast
-- Boot
-- GoreDaughter
-- Jaden
-- Jasper
-- Jb
-- Kin
-- Krisha
-- Masteroms
-- PeachCebo
-- Tamara Mochaccina
-- And you, thank you for using this and making my day <3. Please take care of yourselves.
+To use the game's own FOV, comment the line out.
 
-## Wonderful People Who Sourced Screenshots for me <33333
-- Abooo
-- Dirtkiller23/Aricole
-- Thai
-- Boot
-- Lina 🜏
+---
 
+## Editing a config
 
-# Pretty Important Announcement
-In the patch from a while back there was a change to citadel_main_english.txt stating "Unable to enter matchmaking while any party member has changes to ConVars in Gameinfo.gi or is running Tools-Mode." At present moment it is not fully implemented.
-That aside it is possible that in the future valve will properly implement this, thus restricting the usage of convars ingame. Until that happens (and most likely after it happens) I will still be working on this project. 
+- **Find a setting:** open `gameinfo.gi` in a text editor and `Ctrl+F` the convar name.
+- **Restore a setting to the game default:** comment it out by putting `//` at the start of the line.
+- **Add a convar by hand:** search for `ConVars`, then paste it on a new line after the `{`.
+- **A convar appears twice?** Only the last one counts. That's why the duplicates are tagged in this fork.
 
-Until then you should consider writing [a forum post](https://forums.playdeadlock.com/) going "heyyyyyy I'm scared I won't be able to play this game at ~+60fps if cvars are properly disabled" as it is the most direct way to provide feedback to the developers
+---
+
+## FAQ / troubleshooting
+
+| Problem | Fix |
+|---|---|
+| The config "broke" after a patch | The update overwrote `gameinfo.gi`. Re-copy it, or run the updater. |
+| `FATAL ERROR: Unable to find child '...' in layout file 'panorama\layout\...'` | **This isn't the config.** A UI/HUD mod in `citadel/addons` is overriding a Panorama layout that a game update changed. Disable your UI mods one at a time (or move their `.vpk` out of `addons/`) until it stops, then update or remove that mod. |
+| Mods stopped loading after updating | Your mod loader's search path got dropped. Re-add its `Game` line above `Game "citadel/addons"`, or use the updater, which keeps it. |
+| Characters are dark in the shop / end screen portraits | `lb_enable_dynamic_lights` → `true` |
+| Can't see heroes in the shop / end screen (boot's/Kaiz's) | Comment out `citadel_portrait_world_renderer_off` or set it to `false` |
+| Buildings popping in and out | Comment out `r_farz` and `r_mapextents` *(already done in light)* |
+| Can't see blast vent wind at range | Comment out `sc_fade_distance_scale_override` *(already done in light)* |
+| Can't see boxes or trooper healthbars far away | `r_size_cull_threshold "0.7"`, or comment it and `sc_fade_distance_scale_override` out |
+| Holes in Victor and Paige / Sinner's lights are little triangles | Comment out `sc_screen_size_lod_scale_override` *(already done in light)* |
+| Can't see the Doorman ult indicator | `cl_ragdoll_limit "-1"` |
+| Can't see Lash's ground slam (boot's/Kaiz's) | Comment out `r_drawdecals` or set it to `true` |
+| Can't read in-world text (soul pickups, buffs) | Comment out or raise `citadel_in_world_item_panel_dpi` |
+| Camera dips when Rem/Venator aim down sights | `citadel_camera_use_vmdl_flatten_vertical "true"` |
+| Rainbow puddles, rank display, statues or urn / weird Billy skin (Kaiz's) | `r_citadel_npr_force_solid_outline "false"` |
+| Clothes don't move sometimes (Kaiz's) | `cloth_update "1"` |
+| McGinnis' wall turns into a tombstone for a second | Comment out `CMTAtlasHeight` and `CMTAtlasWidth` under `SceneEffects` |
+| Upscaler looks blurry | In-game, use the Quality preset, turn motion blur off, and try a little sharpening (`r_citadel_fsr2_sharpness` in `cfg/video.txt` for FSR). None of the configs change upscaling. |
+
+---
+
+## Translations (original project)
+
+[Español](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_spanish.md) ·
+[Русский](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_russian.md) ·
+[Português](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_portuguese.md) ·
+[Български](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_bulgarian.md) ·
+[Italiano](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_italian.md) ·
+[Français](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_french.md) ·
+[中文](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_chinese.md) ·
+[Українська](https://github.com/Sqooky/OptimizationLock/blob/main/translations/README_ukrainian.md)
+
+These translate the original README, not this fork's additions.
+
+---
+
+## Credits
+
+- **[Sqooky](https://github.com/Sqooky)** — creator and maintainer of OptimizationLock and its default config. [ko-fi](https://ko-fi.com/sqooky)
+- **boot**, **Kaizuchaneru**, **Piggy** — their configs, included here
+- **Maihdenless** — started the original OptimisationLock and its Discord
+- **Jasper**, **Abdalla**, **Artemon121**, **Kunet**, **Kin** and many others — research, tooling, benchmarks
+- The translators and donors listed in [ORIGINAL_README.md](ORIGINAL_README.md) and at the top of each `gameinfo.gi`
+
+Fork, light config and fixes by **[adamescj](https://github.com/adamescj)**.
+
+## License
+
+Same as the original project: see [LICENSE](LICENSE).

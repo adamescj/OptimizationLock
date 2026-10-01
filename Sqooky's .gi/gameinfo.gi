@@ -895,9 +895,9 @@ GameInfo
         // ================ Models ================
         cl_fasttempentcollision         "1000" // Limits/controls fast collision processing for temporary entities (impacts/tracers/etc.); higher usually = more work. [def: "5"]
         cloth_sim_on_tick               "0"    // Update the cloth simulation every tick                           [def: "1"]
-        enable_boneflex                 "0"    // Disables bone flexes (procedural facial/mesh flex drivers).      [def: "1"]
+        // [duplicate - overridden by the later enable_boneflex "false"] enable_boneflex                 "0"    // Disables bone flexes (procedural facial/mesh flex drivers).      [def: "1"]
         ik_fabrik_align_chain           "1"    // Disables FABRIK chain alignment in IK (cheaper).                 [def: "1"]
-        ik_final_fixup_enable           "0"    // Disables final IK fixup pass (cheaper animations, potentially less accurate). [def: "1"]
+        // [duplicate - overridden by the later ik_final_fixup_enable "false"] ik_final_fixup_enable           "0"    // Disables final IK fixup pass (cheaper animations, potentially less accurate). [def: "1"]
         props_break_max_pieces_perframe "1"    // Makes boxes and troopers break into a single piece               [def: "16"]  // In future updates hopefully this being set to 0 will cause them to not leave any pieces behind
 
         // ================ Visual Clarity ================
@@ -938,13 +938,13 @@ GameInfo
         cl_particle_fallback_base                "5"   // Base for falling back to cheaper effects under load.             [def: "0"]
         // r_particle_mixed_resolution_viewstart    "16"     // I don't know if this does anything but I didn't notice anything terrible out the gate and lowering particle resolution can't hurt [def: "500"]
         //r_particle_timescale                  "1"      // Speeds up particle simulation, thus making them end sooner, however this causes visual desyncs, most notably with big effects that last a while such as infernus ult. Please tweak this to what you are comfortable with. [def: "1"]
-        cl_aggregate_particles                   "true"    // Doesn't seem to cause any issues but a benchmark proper should be conducted [def: "false"]
+        // [duplicate - overridden by the later cl_aggregate_particles "true"] cl_aggregate_particles                   "true"    // Doesn't seem to cause any issues but a benchmark proper should be conducted [def: "false"]
         cl_particle_batch_mode                   "1"       // Has a range of 1 or 2, 2 will make celeste's auto rebound look weird and 0 will make them not batch [def: "1"]
         r_citadel_screenspace_particles_full_res "true"    // Render screen space particles at full resolution. This could introduce readability issues but should be fine. [def: "true"]
         r_draw_particle_children_with_parents    "1"       // I believe this handles the drawing of little visual flourish particles. [def: "-1"]
         r_limit_particle_job_duration            "true"    // Seems to help with particle clutter, although I am not sure.             [def: "false"]
         r_particle_allowprerender                "true"    // I imagine it renders particles prematurely, which we do not care for.    [def: "true"]
-        r_particle_batch_collections             "true"    // Batches collections of particles, typically batch rendering is faster so this is set to true. [def: "false"]
+        // [duplicate - overridden by the later r_particle_batch_collections "1"] r_particle_batch_collections             "true"    // Batches collections of particles, typically batch rendering is faster so this is set to true. [def: "false"]
         r_particle_fixedrandomseeds              "true"    // I need to properly test this, but I'm pretty sure that setting this to true marginally increases performance. That being said it does make flames from paige 1 always appear on the left, so your call ig [def: "false"]
         r_particle_max_texture_layers            "4"       // Anything below 4 will make infernus afterburn, paige fire, and drifter's passive look very weird and blocky [def: "-1"]
         r_particle_min_timestep                  "0.00241" // Minimum amount of time for particles to update. Higher values will have particles stutter, while lower values could negatively impact performance. [def: "0"]
@@ -961,12 +961,12 @@ GameInfo
         //sc_instanced_mesh_lod_bias_shadow       "0.001"  // Bias for LOD selection of instanced meshes in shadowmaps         [def: "1.75"]
         phys_cull_internal_mesh_contacts        "true"  // Don't simulate the bones inside of a mesh.                       [def: "false"]
         sc_aggregate_bvh_threshold              "256"   // Not fully sure what these do. Don't change them.                 [def: "128"]
-        sc_allow_dithered_lod                   "false" // Pretty sure this just turns dithering off for when switching between lods. Isn't a big deal [def: "true"]
+        // [duplicate - overridden by the later sc_allow_dithered_lod "false"] sc_allow_dithered_lod                   "false" // Pretty sure this just turns dithering off for when switching between lods. Isn't a big deal [def: "true"]
         sc_fade_distance_scale_override         "100"   // Distance objects fade in and out                                 [def: "-1"]
         sc_instanced_mesh_motion_vectors        "0"     // Set 1 if you use motion blur                                     [def: "1"]
         sc_instanced_mesh_size_cull_bias_shadow "10"    // Bias for size culling instanced meshes in shadowmaps             [def: "2"]
         sc_layer_batch_threshold                "256"   // Not fully sure what these do. Don't change them.                 [default: "128"]
-        sc_layer_batch_threshold_fullsort       "120"   // Not sure what these do. Jasper said to leave them at default     [def: "80"]
+        // [duplicate - overridden by the later sc_layer_batch_threshold_fullsort "20"] sc_layer_batch_threshold_fullsort       "120"   // Not sure what these do. Jasper said to leave them at default     [def: "80"]
 
         // ================ Rendering Stuff ================
         // sc_aggregate_indirect_draw_compaction_threshold "1"     // Need to test                                                   [def: "8"]
@@ -1000,7 +1000,7 @@ GameInfo
         citadel_test_ranked_summary                       "true"
         cl_batch_entity_list_ops_during_latch             "true"  // Batch entity list adds / removes while latching interpolated variables to avoid mutex contention.        [def: "false"]
         cl_enable_eye_occlusion                           "false" // [def: "true"]
-        cl_interp_parallel                                "true"  // Run interpolation in parallel for entities with no children.     [def: "false"]
+        // [duplicate - overridden by the later cl_interp_parallel "1"] cl_interp_parallel                                "true"  // Run interpolation in parallel for entities with no children.     [def: "false"]
         cl_modifier_parallel_gather_status_effect_updates "false" // Not sure                                                         [def: "false"]
         cl_phys_assume_fixed_tick_interval                "true"  // Assume the client uses a fixed tickrate like the server (which may not always be true)                   [def: "true"]
         csm_viewmodel_farz                                "1"     //
@@ -1046,7 +1046,7 @@ GameInfo
         snd_occlusion_rays                       "0"     // Occlusion bounces, this effectively disables them.               [def: "4"]
         snd_soundmixer_version                   "2"     // [def: "2"]
         snd_steamaudio_reverb_order_rendering    "0"     // The amount of directional detail in the rendered audio by Steam Audio. [def: "0"]
-        snd_ui_positional                        "false" // Disables positional audio to save cpu                            [def: "true"]
+        // [duplicate - overridden by the later snd_ui_positional "1"] snd_ui_positional                        "false" // Disables positional audio to save cpu                            [def: "true"]
         snd_steamaudio_num_threads               "6"     // Audio thread count                                               [def: "4"]
         audio_enable_spawn_mask_mix_layer        "false" // Disabling these should help with performance, Yay! [def: "true"]
         snd_boxverb_simd                         "false" // Disabling these should help with performance, Yay! [def: "true"]
@@ -1248,7 +1248,7 @@ GameInfo
         snd_steamaudio_active_hrtf                                       "0"
         snd_steamaudio_pathing_order                                     "3"
         snd_steamaudio_pathing_order_rendering                           "3"
-        snd_steamaudio_enable_pathing                                    "0"
+        // [duplicate - overridden by the later snd_steamaudio_enable_pathing "0"] snd_steamaudio_enable_pathing                                    "0"
         snd_steamaudio_enable_reverb                                     "0"
         snd_steamaudio_reverb_level_db                                   "-6"
         snd_steamaudio_enable_pathing                                    "0"

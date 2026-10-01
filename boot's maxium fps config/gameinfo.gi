@@ -598,7 +598,7 @@ GameInfo
         // --- 6. FPS Caps & Minimized Throttling ---
         engine_low_latency_sleep_after_client_tick "1"  // Sleeps strategically after client tick to reduce latency/stutter (low-latency pacing). [def: "false"]
         engine_no_focus_sleep                      "0"  // Milliseconds the engine sleeps per frame when unfocused (0 = no sleep, not recommended for low-end PC). [def: "20"]
-        fps_max                                    "0"  // Max FPS while in game, limit fps to your monitor refresh rate. [def: "400"]
+        // [duplicate - overridden by the later fps_max "0"] fps_max                                    "0"  // Max FPS while in game, limit fps to your monitor refresh rate. [def: "400"]
         panorama_max_fps                           "15" // Menu FPS.                                                        [def: "120"]
         panorama_max_overlay_fps                   "15" // Fps In the settings/esc menu.                                    [def: "60"]
 
@@ -820,7 +820,7 @@ GameInfo
         // cl_predict_after_every_createmove            "0"    // Test 1 0
         // cl_predictioncopy_runs                       "0"    // Put to 1 if character vibrates
         // net_skip_redundant_change_callbacks          "true" // Default false, im p sure this keep pulling up report screen for some reason
-        cl_async_usercmd_send                           "true" // Makes the client send updates asyncronously I belive. Seems to smooth over network jank, although you will need to remove it from lower down in the gameinfo.gi [def: "false"]
+        // [duplicate - overridden by the later cl_async_usercmd_send "true"] cl_async_usercmd_send                           "true" // Makes the client send updates asyncronously I belive. Seems to smooth over network jank, although you will need to remove it from lower down in the gameinfo.gi [def: "false"]
         cl_eye_yaw_multiplier                           "0"
         cl_parallel_readpacketentities                  "1"
         cl_parallel_readpacketentities_threshold        "2"
@@ -853,7 +853,7 @@ GameInfo
 
         // ================ Particles ================
         // cl_particle_sim_fallback_base_multiplier "5" // How aggressive the switch to fallbacks will be depending on how far over the cl_particle_sim_fallback_threshold_ms the sim time is. [def: "5"]
-        cl_aggregate_particles                      "1"
+        // [duplicate - overridden by the later cl_aggregate_particles "true"] cl_aggregate_particles                      "1"
         cl_particle_batch_mode                      "1"     // Has a range of 1 or 2, 2 will make celeste's auto rebound look weird and 0 will make them not batch [def: "1"]
         // cl_particle_fallback_base                   "10"    // Base for falling back to cheaper effects under load.             [def: "0"]
         // cl_particle_fallback_multiplier             "10"    // Multiplier for falling back to cheaper effects under load.       [def: "0"]
