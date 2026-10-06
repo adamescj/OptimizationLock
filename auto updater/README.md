@@ -33,6 +33,7 @@ python gameinfo_updater.py update [options]
 | `--dry-run` | Print the override summary (and diff, if `--diff`) without writing anything. |
 | `--diff` | Print a unified diff of the current file vs. the new one. |
 | `--no-backup` | Skip creating a timestamped backup before writing. |
+| `--no-keep-searchpaths` | Don't carry over extra `Game` search paths (e.g. Grimoire's `citadel/grimoire`) from your current file. |
 
 Only one of `--config`, `--url` may be used at a time.
 
@@ -80,6 +81,7 @@ Available configs (use with --config <name>):
   test      Test_Cfg (Sqooky experimental)
   piggy     Piggy's Config (comparatively outdated)
   clean     Clean / Near-Vanilla
+  light     adamescj's Light (visuals-first edit of Sqooky's)
 ```
 
 ---
@@ -130,6 +132,8 @@ panorama_max_fps 60
 
 ## Extra info
 
+- **Mod loaders are kept.** If your current `gameinfo.gi` has extra `Game` search paths that the downloaded config doesn't (for example Grimoire's `citadel/grimoire`), they're carried over and placed right before `citadel/addons`. Pass `--no-keep-searchpaths` to turn that off.
+- `overrides.light.gi` rebuilds the light config's changes on top of any other config, e.g. `python gameinfo_updater.py update --overrides overrides.light.gi`.
 - A timestamped backup is created automatically before every write unless you pass `--no-backup`.
 - Use `--dry-run` to preview the full unified diff before committing.
 

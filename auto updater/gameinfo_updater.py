@@ -26,20 +26,21 @@ from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 
 REPO = "Sqooky/OptimizationLock"
 RAW_BASE = "https://raw.githubusercontent.com/{repo}/{ref}/{path}"
 DEFAULT_REF = "main"
 
-# name -> (description, path in repo)
-CONFIGS: Dict[str, Tuple[str, str]] = {
+# name -> (description, path in repo[, repo override])
+CONFIGS: Dict[str, Tuple[str, ...]] = {
     "sqooky": ("Sqooky's OptimizationLock (recommended)", "Sqooky's .gi/gameinfo.gi"),
     "boot":   ("Boot's Maximum FPS", "boot's maxium fps config/gameinfo.gi"), # "maxium" minor spelling error !!1!
     "kaiz":   ("Kaizuchaneru's Minimum Spec", "kaizuchanerus minimum spec/gameinfo.gi"),
     "test":   ("Test_Cfg (Sqooky experimental)", "test_cfg/gameinfo.gi"),
     "piggy":  ("Piggy's Config (comparatively outdated)", "piggy's config (comparatively outdated)/gameinfo.gi"),
     "clean":  ("Clean / Near-Vanilla", "clean gameinfo.gi/gameinfo.gi"),
+    "light":  ("adamescj's Light (visuals-first edit of Sqooky's)", "adamescj's light config/gameinfo.gi", "adamescj/OptimizationLock"),
 }
 
 # mark injected convars that aren't arlready present
@@ -98,8 +99,10 @@ def resolve_gi(args: argparse.Namespace) -> Path:
 
 
 def config_to_url(name: str) -> str:
-    _, repo_path = CONFIGS[name]
-    return RAW_BASE.format(repo=REPO, ref=DEFAULT_REF, path=urllib.parse.quote(repo_path, safe="/"))
+    entry = CONFIGS[name]
+    repo_path = entry[1]
+    repo = entry[2] if len(entry) > 2 else REPO
+    return RAW_BASE.format(repo=repo, ref=DEFAULT_REF, path=urllib.parse.quote(repo_path, safe="/"))
 
 
 def normalize_github_url(url: str) -> str:
@@ -325,6 +328,82 @@ def apply_overrides(
 
     summary["injected"] = unmatched
     return "".join(pre + new_body + post), summary
+
+
+SEARCHPATH_ENTRY_RE = re.compile(r"^\s*(?P<key>\w+)\s+\"?(?P<path>[^\"\s]+)\"?\s*(//.*)?$")
+
+
+def find_searchpaths_block(lines: List[str]) -> Tuple[int, int]:
+    """return (open_brace_line, close_brace_line) of the SearchPaths block, or (-1, -1)"""
+    for i, line in enumerate(lines):
+        if re.match(r"^\s*SearchPaths\b", line):
+            depth = 0
+            opened = -1
+            for j in range(i, len(lines)):
+                code = re.sub(r"//.*", "", lines[j])
+                for ch in code:
+                    if ch == "{":
+                        depth += 1
+                        if opened < 0:
+                            opened = j
+                    elif ch == "}":
+                        depth -= 1
+                        if opened >= 0 and depth == 0:
+                            return opened, j
+            break
+    return -1, -1
+
+
+def searchpath_entries(lines: List[str]) -> List[Tuple[str, str]]:
+    start, end = find_searchpaths_block(lines)
+    out = []
+    if start < 0:
+        return out
+    for line in lines[start + 1 : end]:
+        if line.lstrip().startswith("//"):
+            continue
+        m = SEARCHPATH_ENTRY_RE.match(line.rstrip("\r\n"))
+        if m:
+            out.append((m.group("key"), m.group("path")))
+    return out
+
+
+def preserve_search_paths(current: str, upstream: str) -> Tuple[str, List[str]]:
+    """
+    carry over Game search paths from the installed file that upstream doesn't have
+    (mod loaders like Grimoire add their own). they're inserted right before upstream's
+    citadel/addons entry so they keep their priority over the base game
+    """
+    upstream_lines = upstream.splitlines(keepends=True)
+    known = {(k.lower(), p.lower()) for k, p in searchpath_entries(upstream_lines)}
+    extra = [
+        (k, p) for k, p in searchpath_entries(current.splitlines(keepends=True))
+        if k == "Game" and (k.lower(), p.lower()) not in known
+    ]
+    if not extra:
+        return upstream, []
+
+    start, end = find_searchpaths_block(upstream_lines)
+    if start < 0:
+        return upstream, []
+
+    eol = "\r\n" if "\r\n" in upstream else "\n"
+    insert_at, indent = None, "            "
+    for i in range(start + 1, end):
+        m = SEARCHPATH_ENTRY_RE.match(upstream_lines[i].rstrip("\r\n"))
+        if m and not upstream_lines[i].lstrip().startswith("//") and m.group("key") == "Game":
+            indent = upstream_lines[i][: len(upstream_lines[i]) - len(upstream_lines[i].lstrip())]
+            if insert_at is None:
+                insert_at = i
+            if m.group("path").lower() == "citadel/addons":
+                insert_at = i
+                break
+    if insert_at is None:
+        insert_at = end
+
+    new = ['{}Game          "{}"{}'.format(indent, p, eol) for _, p in extra]
+    upstream_lines[insert_at:insert_at] = new
+    return "".join(upstream_lines), [p for _, p in extra]
 
 
 def make_backup(gi_path: Path) -> Path:
@@ -584,6 +663,12 @@ def cmd_update(args: argparse.Namespace) -> None:
             "handled_set": set(), "handled_comment": set(),
         }
 
+    if not args.no_keep_searchpaths and gi_path.is_file():
+        current_text = gi_path.read_text(encoding="utf-8", errors="replace")
+        modified, kept = preserve_search_paths(current_text, modified)
+        for p in kept:
+            print("  Kept search path from your current file: Game \"{}\"".format(p))
+
     validate_braces(modified)
 
     if args.diff:
@@ -621,7 +706,7 @@ def cmd_update(args: argparse.Namespace) -> None:
 
 def cmd_list_configs(_args: argparse.Namespace) -> None:
     print("Available configs (use with --config <name>):\n")
-    for name, (desc, _) in CONFIGS.items():
+    for name, (desc, *_rest) in CONFIGS.items():
         print("  {:<8}  {}".format(name, desc))
         print("             {}".format(config_to_url(name)))
         print()
@@ -704,6 +789,10 @@ def build_parser() -> argparse.ArgumentParser:
     update_parser.add_argument(
         "--diff", action="store_true",
         help="Print a unified diff of the current file vs the new one (off by default)",
+    )
+    update_parser.add_argument(
+        "--no-keep-searchpaths", action="store_true",
+        help="Don't carry over extra Game search paths (e.g. Grimoire) from the current file",
     )
     update_parser.add_argument(
         "--no-backup", action="store_true",
